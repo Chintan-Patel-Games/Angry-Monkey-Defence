@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
 using ServiceLocator.Wave.Bloon;
 using ServiceLocator.Player.Projectile;
-using ServiceLocator.Sound;
 
 namespace ServiceLocator.Player
 {

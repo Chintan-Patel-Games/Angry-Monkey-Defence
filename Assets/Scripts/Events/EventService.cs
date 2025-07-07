@@ -12,8 +12,22 @@ namespace ServiceLocator.Events
     {
         public GameEventController<int> OnMapSelected { get; private set; }
 
+        public static EventService Instance { get { return instance; } }
+        private static EventService instance;
+
         private void Awake()
         {
+            if (instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(this.gameObject);
+                Debug.LogError("Singleton of EventService is trying to create Second Instance");
+            }
+
             OnMapSelected = new GameEventController<int>();
         }
         
