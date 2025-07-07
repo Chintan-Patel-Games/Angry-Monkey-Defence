@@ -41,7 +41,7 @@ namespace ServiceLocator.Wave
 
         private void InitializeBloons()
         {
-            bloonPool = new BloonPool(waveScriptableObject);
+            bloonPool = new BloonPool(this, playerService, soundService, waveScriptableObject);
             activeBloons = new List<BloonController>();
         }
 
