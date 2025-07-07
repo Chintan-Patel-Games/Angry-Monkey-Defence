@@ -1,11 +1,11 @@
+using UnityEngine;
 using ServiceLocator.Events;
 using ServiceLocator.Map;
-using ServiceLocator.Player;
+using ServiceLocator.Wave;
 using ServiceLocator.Sound;
+using ServiceLocator.Player;
 using ServiceLocator.UI;
 using ServiceLocator.Utilities;
-using ServiceLocator.Wave;
-using UnityEngine;
 
 namespace ServiceLocator.Main
 {
@@ -28,29 +28,31 @@ namespace ServiceLocator.Main
         [SerializeField] private SoundScriptableObject soundScriptableObject;
         [SerializeField] private PlayerScriptableObject playerScriptableObject;
 
-        // Scene Referneces:
-        [SerializeField] private AudioSource SFXSource;
-        [SerializeField] private AudioSource BGSource;
+        // Scene References:
+        [SerializeField] private AudioSource sfxSource;
+        [SerializeField] private AudioSource bgMusicSource;
 
         private void Start()
         {
-            createServices();
+            InitializeServices();
             InjectDependencies();
         }
 
-        private void createServices()
+        private void InitializeServices()
         {
             EventService = new EventService();
-            UIService.SubscribeToEvents();
+            SoundService = new SoundService(soundScriptableObject, sfxSource, bgMusicSource);
             MapService = new MapService(mapScriptableObject);
-            WaveService = new WaveService(waveScriptableObject);
-            SoundService = new SoundService(soundScriptableObject, SFXSource, BGSource);
             PlayerService = new PlayerService(playerScriptableObject);
+            WaveService = new WaveService(waveScriptableObject);
         }
 
         private void InjectDependencies()
         {
+            MapService.Init(EventService);
+            UIService.Init(WaveService, PlayerService, EventService);
             PlayerService.Init(MapService, uiService, SoundService);
+            WaveService.Init(uiService, MapService, PlayerService, SoundService, EventService);
         }
 
         private void Update()
