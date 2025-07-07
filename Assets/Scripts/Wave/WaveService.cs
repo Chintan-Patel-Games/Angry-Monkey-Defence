@@ -2,6 +2,7 @@ using ServiceLocator.Events;
 using ServiceLocator.Map;
 using ServiceLocator.Sound;
 using ServiceLocator.UI;
+using ServiceLocator.Utilities;
 using ServiceLocator.Wave.Bloon;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace ServiceLocator.Wave
 {
-    public class WaveService : MonoBehaviour
+    public class WaveService : GenericMonoSingleton<WaveService>
     {
         [SerializeField] private WaveScriptableObject waveScriptableObject;
         private BloonPool bloonPool;
@@ -17,22 +18,6 @@ namespace ServiceLocator.Wave
         private int currentWaveId;
         private List<WaveData> waveDatas;
         private List<BloonController> activeBloons;
-
-        public static WaveService Instance { get { return instance; } }
-        private static WaveService instance;
-
-        private void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else
-            {
-                Destroy(this.gameObject);
-                Debug.LogError("Singleton of WaveService is trying to create Second Instance");
-            }
-        }
 
         private void Start()
         {

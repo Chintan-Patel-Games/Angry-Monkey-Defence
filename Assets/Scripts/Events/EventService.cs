@@ -1,3 +1,4 @@
+using ServiceLocator.Utilities;
 using UnityEngine;
 
 /**  This script demonstrates implementation of the Observer Pattern.
@@ -8,28 +9,14 @@ using UnityEngine;
 
 namespace ServiceLocator.Events
 {
-    public class EventService : MonoBehaviour
+    public class EventService : GenericMonoSingleton<EventService>
     {
         public GameEventController<int> OnMapSelected { get; private set; }
 
-        public static EventService Instance { get { return instance; } }
-        private static EventService instance;
-
-        private void Awake()
+        protected override void Awake()
         {
-            if (instance == null)
-            {
-                instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                Destroy(this.gameObject);
-                Debug.LogError("Singleton of EventService is trying to create Second Instance");
-            }
-
+            base.Awake();
             OnMapSelected = new GameEventController<int>();
         }
-        
     }
 }

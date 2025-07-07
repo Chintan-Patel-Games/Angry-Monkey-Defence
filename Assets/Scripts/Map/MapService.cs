@@ -3,10 +3,11 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using ServiceLocator.Player;
 using ServiceLocator.Events;
+using ServiceLocator.Utilities;
 
 namespace ServiceLocator.Map
 {
-    public class MapService : MonoBehaviour
+    public class MapService : GenericMonoSingleton<MapService>
     {
         [SerializeField] private MapScriptableObject mapScriptableObject;
 
@@ -14,23 +15,6 @@ namespace ServiceLocator.Map
         private Tilemap currentTileMap;
         private MapData currentMapData;
         private SpriteRenderer tileOverlay;
-
-        public static MapService Instance { get { return instance; } }
-        private static MapService instance;
-
-        private void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                Destroy(this.gameObject);
-                Debug.LogError("Singleton of MapService is trying to create Second Instance");
-            }
-        }
 
         private void Start()
         {
